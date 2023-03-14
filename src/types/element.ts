@@ -9,6 +9,8 @@ export type FreeDrawnElement = {
   id: string;
   type: ElementType.FreeDrawn;
   points: number[];
+  strokeColor: string;
+  strokeWidth: number;
 };
 
 export type EllipseElement = {
@@ -22,6 +24,8 @@ export type EllipseElement = {
   endY: number;
   radiusX: number;
   radiusY: number;
+  strokeColor: string;
+  strokeWidth: number;
 };
 
 export type RectangleElement = {
@@ -31,6 +35,8 @@ export type RectangleElement = {
   y: number;
   height: number;
   width: number;
+  strokeColor: string;
+  strokeWidth: number;
 };
 
 export type LineElement = {
@@ -40,6 +46,8 @@ export type LineElement = {
   startY: number;
   endX: number;
   endY: number;
+  strokeColor: string;
+  strokeWidth: number;
 };
 
 export type DrawnElement = FreeDrawnElement | EllipseElement | RectangleElement | LineElement;

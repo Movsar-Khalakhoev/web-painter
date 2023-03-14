@@ -6,5 +6,15 @@ interface FreeDrawnElementProps {
 }
 
 export function FreeDrawnElement({ element }: FreeDrawnElementProps) {
-  return <Line points={element.points} stroke="#df4b26" strokeWidth={5} tension={0.5} lineCap="round" lineJoin="round" globalCompositeOperation={"source-over"} />;
+  return (
+    <Line
+      points={element.points}
+      stroke={element.strokeColor}
+      strokeWidth={element.strokeWidth}
+      tension={0.5}
+      lineCap="round"
+      lineJoin="round"
+      globalCompositeOperation={"source-over"}
+    />
+  );
 }

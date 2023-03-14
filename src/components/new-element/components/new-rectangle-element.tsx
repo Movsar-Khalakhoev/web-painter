@@ -1,6 +1,6 @@
 import { useStageEvents } from "../hooks/use-stage-events";
 import Konva from "konva";
-import { RefObject, useRef, useState } from "react";
+import { RefObject, useCallback, useRef, useState } from "react";
 import { Rect } from "react-konva";
 import { useStore } from "store";
 import { ElementType } from "types/element";
@@ -21,19 +21,20 @@ interface NewRectangleElementProps {
 
 export function NewRectangleElement({ stageRef }: NewRectangleElementProps) {
   const addDrawnElement = useStore((store) => store.addDrawnElement);
+  const selectedStrokeColor = useStore((store) => store.selectedStrokeColor);
+  const selectedStrokeWidth = useStore((store) => store.selectedStrokeWidth);
   const [rectangle, setRectangle] = useState<IRectangle>();
   const isDrawing = useRef(false);
-  useStageEvents({ stageRef, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp });
 
-  function handleMouseDown() {
+  const handleMouseDown = useCallback(() => {
     if (!stageRef.current) return;
 
     isDrawing.current = true;
     const pos = stageRef.current.getPointerPosition();
     if (pos) setRectangle({ startX: pos.x, startY: pos.y, x: pos.x, y: pos.y, height: 0, width: 0 });
-  }
+  }, []);
 
-  function handleMouseMove() {
+  const handleMouseMove = useCallback(() => {
     if (!isDrawing.current) return;
     if (!stageRef.current) return;
 
@@ -55,9 +56,9 @@ export function NewRectangleElement({ stageRef }: NewRectangleElementProps) {
         height: Math.max(rectangle.startY, pos.y) - y,
       };
     });
-  }
+  }, []);
 
-  function handleMouseUp() {
+  const handleMouseUp = useCallback(() => {
     isDrawing.current = false;
     setRectangle((rectangle) => {
       if (!rectangle) return undefined;
@@ -65,12 +66,16 @@ export function NewRectangleElement({ stageRef }: NewRectangleElementProps) {
         id: uniqueId(),
         type: ElementType.Rectangle,
         ...rectangle,
+        strokeColor: selectedStrokeColor,
+        strokeWidth: selectedStrokeWidth,
       });
       return undefined;
     });
-  }
+  }, [selectedStrokeColor, selectedStrokeWidth]);
+
+  useStageEvents({ stageRef, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp });
 
   if (!rectangle) return null;
 
-  return <Rect x={rectangle.x} y={rectangle.y} width={rectangle.width} height={rectangle.height} stroke="red" />;
+  return <Rect x={rectangle.x} y={rectangle.y} width={rectangle.width} height={rectangle.height} stroke={selectedStrokeColor} strokeWidth={selectedStrokeWidth} />;
 }

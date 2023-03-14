@@ -1,6 +1,6 @@
 import { useStageEvents } from "../hooks/use-stage-events";
 import Konva from "konva";
-import { RefObject, useRef, useState } from "react";
+import { RefObject, useCallback, useRef, useState } from "react";
 import { Ellipse } from "react-konva";
 import { useStore } from "store";
 import { ElementType } from "types/element";
@@ -24,19 +24,20 @@ interface NewEllipseElementProps {
 
 export function NewEllipseElement({ stageRef }: NewEllipseElementProps) {
   const addDrawnElement = useStore((store) => store.addDrawnElement);
+  const selectedStrokeColor = useStore((store) => store.selectedStrokeColor);
+  const selectedStrokeWidth = useStore((store) => store.selectedStrokeWidth);
   const [ellipse, setEllipse] = useState<IEllipse>();
   const isDrawing = useRef(false);
-  useStageEvents({ stageRef, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp });
 
-  function handleMouseDown() {
+  const handleMouseDown = useCallback(() => {
     if (!stageRef.current) return;
 
     isDrawing.current = true;
     const pos = stageRef.current.getPointerPosition();
     if (pos) setEllipse({ startX: pos.x, startY: pos.y, centerX: pos.x, centerY: pos.y, endX: pos.x, endY: pos.y, radiusX: 0, radiusY: 0 });
-  }
+  }, []);
 
-  function handleMouseMove() {
+  const handleMouseMove = useCallback(() => {
     if (!isDrawing.current) return;
     if (!stageRef.current) return;
 
@@ -64,9 +65,9 @@ export function NewEllipseElement({ stageRef }: NewEllipseElementProps) {
         radiusY,
       };
     });
-  }
+  }, []);
 
-  function handleMouseUp() {
+  const handleMouseUp = useCallback(() => {
     isDrawing.current = false;
     setEllipse((ellipse) => {
       if (!ellipse) return undefined;
@@ -74,12 +75,16 @@ export function NewEllipseElement({ stageRef }: NewEllipseElementProps) {
         id: uniqueId(),
         type: ElementType.Ellipse,
         ...ellipse,
+        strokeColor: selectedStrokeColor,
+        strokeWidth: selectedStrokeWidth,
       });
       return undefined;
     });
-  }
+  }, [selectedStrokeColor, selectedStrokeWidth]);
+
+  useStageEvents({ stageRef, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp });
 
   if (!ellipse) return null;
 
-  return <Ellipse radiusX={ellipse.radiusX} radiusY={ellipse.radiusY} x={ellipse.centerX} y={ellipse.centerY} stroke="red" strokeWidth={3} />;
+  return <Ellipse radiusX={ellipse.radiusX} radiusY={ellipse.radiusY} x={ellipse.centerX} y={ellipse.centerY} stroke={selectedStrokeColor} strokeWidth={selectedStrokeWidth} />;
 }

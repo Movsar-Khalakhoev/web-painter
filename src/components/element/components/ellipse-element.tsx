@@ -6,5 +6,5 @@ interface EllipselementProps {
 }
 
 export function EllipseElement({ element }: EllipselementProps) {
-  return <Ellipse radiusX={element.radiusX} radiusY={element.radiusY} x={element.centerX} y={element.centerY} stroke="red" strokeWidth={3} />;
+  return <Ellipse radiusX={element.radiusX} radiusY={element.radiusY} x={element.centerX} y={element.centerY} stroke={element.strokeColor} strokeWidth={element.strokeWidth} />;
 }

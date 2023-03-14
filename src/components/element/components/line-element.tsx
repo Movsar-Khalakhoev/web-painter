@@ -6,5 +6,5 @@ interface LineElementProps {
 }
 
 export function LineElement({ element }: LineElementProps) {
-  return <Line points={[element.startX, element.startY, element.endX, element.endY]} stroke="red" />;
+  return <Line points={[element.startX, element.startY, element.endX, element.endY]} stroke={element.strokeColor} strokeWidth={element.strokeWidth} />;
 }

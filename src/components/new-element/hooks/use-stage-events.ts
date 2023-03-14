@@ -21,5 +21,5 @@ export function useStageEvents({ stageRef, onMouseDown, onMouseMove, onMouseUp }
         stageRef.current?.removeEventListener("mouseup");
       };
     }
-  }, [onMouseDown, onMouseMove]);
+  }, [onMouseDown, onMouseMove, onMouseUp]);
 }

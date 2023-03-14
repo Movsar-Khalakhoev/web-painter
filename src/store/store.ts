@@ -7,11 +7,19 @@ interface Store {
   setSelectedTool: (tool: Tool) => void;
   drawnElements: DrawnElement[];
   addDrawnElement: (element: DrawnElement) => void;
+  selectedStrokeWidth: number;
+  setSelectedStrokeWidth: (width: number) => void;
+  selectedStrokeColor: string;
+  setSelectedStrokeColor: (color: string) => void;
 }
 
 export const useStore = create<Store>((set, get) => ({
   selectedTool: Tool.Ellipse,
-  setSelectedTool: (tool: Tool) => set({ selectedTool: tool }),
+  setSelectedTool: (tool) => set({ selectedTool: tool }),
   drawnElements: [],
-  addDrawnElement: (element: DrawnElement) => set({ drawnElements: [...get().drawnElements, element] }),
+  addDrawnElement: (element) => set({ drawnElements: [...get().drawnElements, element] }),
+  selectedStrokeWidth: 2,
+  setSelectedStrokeWidth: (width) => set({ selectedStrokeWidth: width }),
+  selectedStrokeColor: "#ff0000",
+  setSelectedStrokeColor: (color) => set({ selectedStrokeColor: color }),
 }));
