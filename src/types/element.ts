@@ -33,4 +33,13 @@ export type RectangleElement = {
   width: number;
 };
 
-export type DrawnElement = FreeDrawnElement | EllipseElement | RectangleElement;
+export type LineElement = {
+  id: string;
+  type: ElementType.Line;
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+};
+
+export type DrawnElement = FreeDrawnElement | EllipseElement | RectangleElement | LineElement;
