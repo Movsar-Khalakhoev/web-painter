@@ -1,16 +1,29 @@
 import { Tool } from "./components/tool";
 import cn from "classnames";
+import Konva from "konva";
+import { RefObject } from "react";
 import { useStore } from "store";
 import { Tool as ToolEnum } from "types/tools";
+import { downloadURI } from "utils/download-uri";
 
-export function Tools() {
+interface ToolsProps {
+  stageRef: RefObject<Konva.Stage>;
+}
+
+export function Tools({ stageRef }: ToolsProps) {
   const selectedStrokeWidth = useStore((store) => store.selectedStrokeWidth);
   const setSelectedStrokeWidth = useStore((store) => store.setSelectedStrokeWidth);
   const selectedColor = useStore((store) => store.selectedStrokeColor);
   const setSelectedColor = useStore((store) => store.setSelectedStrokeColor);
 
+  function takeSnapshot() {
+    if (!stageRef.current) return;
+
+    downloadURI(stageRef.current.toDataURL(), "canvas.jpg");
+  }
+
   return (
-    <div className="flex flex-col gap-1 fixed left-2 top-1/2 -translate-y-1/2 w-12 shadow-xl border rounded-lg p-1 z-10">
+    <div className="flex flex-col gap-1 fixed left-3 top-1/2 -translate-y-1/2 w-12 shadow-xl border rounded-lg p-1 z-10">
       <Tool name="курсор" tool={ToolEnum.Cursor} />
       <Tool name="круг" tool={ToolEnum.Ellipse} />
       <Tool name="прямоугольник" tool={ToolEnum.Rectangle} />
@@ -36,6 +49,7 @@ export function Tools() {
         )}
       />
       <input type="color" className="w-full" value={selectedColor} onChange={(event) => setSelectedColor(event.target.value)} />
+      <Tool name="скачать" onClick={takeSnapshot} />
     </div>
   );
 }
