@@ -1,6 +1,6 @@
 export enum Tool {
   Cursor,
-  Circle,
+  Ellipse,
   Rectangle,
   Line,
   Brush,

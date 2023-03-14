@@ -10,7 +10,7 @@ interface Store {
 }
 
 export const useStore = create<Store>((set, get) => ({
-  selectedTool: Tool.Cursor,
+  selectedTool: Tool.Ellipse,
   setSelectedTool: (tool: Tool) => set({ selectedTool: tool }),
   drawnElements: [],
   addDrawnElement: (element: DrawnElement) => set({ drawnElements: [...get().drawnElements, element] }),

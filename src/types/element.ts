@@ -1,5 +1,5 @@
 export enum ElementType {
-  Circle,
+  Ellipse,
   Rectangle,
   Line,
   FreeDrawn,
@@ -11,4 +11,17 @@ export type FreeDrawnElement = {
   points: number[];
 };
 
-export type DrawnElement = FreeDrawnElement;
+export type EllipseElement = {
+  id: string;
+  type: ElementType.Ellipse;
+  startX: number;
+  startY: number;
+  centerX: number;
+  centerY: number;
+  endX: number;
+  endY: number;
+  radiusX: number;
+  radiusY: number;
+};
+
+export type DrawnElement = FreeDrawnElement | EllipseElement;

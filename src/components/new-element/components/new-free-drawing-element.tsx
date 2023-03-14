@@ -1,3 +1,4 @@
+import { useStageEvents } from "../hooks/use-stage-events";
 import Konva from "konva";
 import { RefObject, useEffect, useRef, useState } from "react";
 import { Line } from "react-konva";
@@ -13,16 +14,17 @@ export function NewFreeDrawingElement({ stageRef }: NewFreeDrawingElementProps) 
   const addDrawnElement = useStore((store) => store.addDrawnElement);
   const [points, setPoints] = useState<number[]>([]);
   const isDrawing = useRef(false);
+  useStageEvents({ stageRef, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp });
 
-  const handleMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
+  function handleMouseDown(e: Konva.KonvaEventObject<MouseEvent>) {
     if (!stageRef.current) return;
 
     isDrawing.current = true;
     const pos = stageRef.current.getPointerPosition();
     if (pos) setPoints((points) => [...points, pos.x, pos.y]);
-  };
+  }
 
-  const handleMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
+  function handleMouseMove(e: Konva.KonvaEventObject<MouseEvent>) {
     if (!isDrawing.current) return;
     if (!stageRef.current) return;
 
@@ -31,9 +33,9 @@ export function NewFreeDrawingElement({ stageRef }: NewFreeDrawingElementProps) 
     if (!pos) return;
 
     setPoints((points) => [...points, pos.x, pos.y]);
-  };
+  }
 
-  const handleMouseUp = () => {
+  function handleMouseUp() {
     isDrawing.current = false;
     setPoints((points) => {
       addDrawnElement({
@@ -43,21 +45,7 @@ export function NewFreeDrawingElement({ stageRef }: NewFreeDrawingElementProps) 
       });
       return [];
     });
-  };
-
-  useEffect(() => {
-    if (stageRef.current) {
-      stageRef.current.addEventListener("mousedown", handleMouseDown as any);
-      stageRef.current.addEventListener("mousemove", handleMouseMove as any);
-      stageRef.current.addEventListener("mouseup", handleMouseUp as any);
-
-      return () => {
-        stageRef.current?.removeEventListener("mousedown");
-        stageRef.current?.removeEventListener("mousemove");
-        stageRef.current?.removeEventListener("mouseup");
-      };
-    }
-  }, []);
+  }
 
   return <Line points={points} stroke="#df4b26" strokeWidth={5} tension={0.5} lineCap="round" lineJoin="round" globalCompositeOperation={"source-over"} />;
 }
