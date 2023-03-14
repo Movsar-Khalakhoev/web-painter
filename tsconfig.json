@@ -19,7 +19,8 @@
     "paths": {
       "components/*": ["./components/*"],
       "store/*": ["./store/*"],
-      "types/*": ["./types/*"]
+      "types/*": ["./types/*"],
+      "utils/*": ["./utils/*"]
     }
   },
   "include": ["src"],
