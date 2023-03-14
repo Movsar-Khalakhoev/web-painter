@@ -1,5 +1,6 @@
 import { NewEllipseElement } from "./components/new-ellipse-element";
 import { NewFreeDrawingElement } from "./components/new-free-drawing-element";
+import { NewRectangleElement } from "./components/new-rectangle-element";
 import Konva from "konva";
 import { RefObject } from "react";
 import { Layer, Stage } from "react-konva";
@@ -17,6 +18,7 @@ export function NewElement({ stageRef }: NewElementProps) {
     <Layer>
       {selectedTool === Tool.Brush && <NewFreeDrawingElement stageRef={stageRef} />}
       {selectedTool === Tool.Ellipse && <NewEllipseElement stageRef={stageRef} />}
+      {selectedTool === Tool.Rectangle && <NewRectangleElement stageRef={stageRef} />}
     </Layer>
   );
 }

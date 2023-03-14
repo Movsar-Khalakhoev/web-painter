@@ -24,4 +24,13 @@ export type EllipseElement = {
   radiusY: number;
 };
 
-export type DrawnElement = FreeDrawnElement | EllipseElement;
+export type RectangleElement = {
+  id: string;
+  type: ElementType.Rectangle;
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+};
+
+export type DrawnElement = FreeDrawnElement | EllipseElement | RectangleElement;
